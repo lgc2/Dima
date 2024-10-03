@@ -14,3 +14,7 @@ dotnet sln add ./Dima.Core/
 
 dotnet new web -o Dima.Api
 dotnet sln add ./Dima.Api/
+
+// within Dima.Api
+dotnet add package Microsoft.AspNetCore.OpenApi
+dotnet add package Swashbuckle.AspNetCore
