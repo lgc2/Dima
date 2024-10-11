@@ -4,7 +4,7 @@ namespace Dima.Core.Responses;
 
 public class Response<TData>
 {
-	private readonly int _code;
+	public readonly int _code;
 	public TData? Data { get; set; }
 	public string? Message { get; set; }
 
