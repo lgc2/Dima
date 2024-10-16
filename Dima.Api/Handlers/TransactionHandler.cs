@@ -1,4 +1,5 @@
 ﻿using Dima.Api.Data;
+using Dima.Core.Common.Extensions;
 using Dima.Core.Handlers;
 using Dima.Core.Models;
 using Dima.Core.Requests.Transactions;
@@ -38,7 +39,10 @@ namespace Dima.Api.Handlers
 		{
 			try
 			{
-				var transaction = await context.Transactions.FirstOrDefaultAsync(t => t.Id == request.Id && t.UserId == request.UserId);
+				var transaction = await context
+					.Transactions
+					.AsNoTracking()
+					.FirstOrDefaultAsync(t => t.Id == request.Id && t.UserId == request.UserId);
 
 				if (transaction == null) return new Response<Transaction?>(null, 404, "Transaction not found");
 
@@ -63,7 +67,10 @@ namespace Dima.Api.Handlers
 		{
 			try
 			{
-				var transaction = await context.Transactions.FirstOrDefaultAsync(t => t.Id == request.Id && t.UserId == request.UserId);
+				var transaction = await context
+					.Transactions
+					.AsNoTracking()
+					.FirstOrDefaultAsync(t => t.Id == request.Id && t.UserId == request.UserId);
 
 				if (transaction == null) return new Response<Transaction?>(null, 404, "Transaction not found");
 
@@ -78,14 +85,60 @@ namespace Dima.Api.Handlers
 			}
 		}
 
-		public Task<Response<Transaction?>> GetByIdAsync(GetTransactionByIdRequest request)
+		public async Task<Response<Transaction?>> GetByIdAsync(GetTransactionByIdRequest request)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var transaction = await context
+					.Transactions
+					.AsNoTracking()
+					.FirstOrDefaultAsync(t => t.Id == request.Id && t.UserId == request.UserId);
+
+				return transaction == null
+					? new Response<Transaction?>(null, 404, "Transaction not found")
+					: new Response<Transaction?>(transaction);
+			}
+			catch
+			{
+				return new Response<Transaction?>(null, 500, "Something went wrong");
+			}
 		}
 
-		public Task<PagedResponse<List<Transaction>?>> GetByPeriodAsync(GetTransationByPeriodRequest request)
+		public async Task<PagedResponse<List<Transaction>?>> GetByPeriodAsync(GetTransationByPeriodRequest request)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				request.StartDate ??= DateTime.UtcNow.GetFirstDay();
+				request.EndDate ??= DateTime.UtcNow.GetLastDay();
+			}
+			catch
+			{
+				return new PagedResponse<List<Transaction>?>(null, 500, "It was not possible to get the start date or the end date");
+			}
+
+			var query = context
+					.Transactions
+					.AsNoTracking()
+					.Where(t => t.UserId == request.UserId && (t.CreatedAt >= request.StartDate && t.CreatedAt <= request.EndDate));
+
+			try
+			{
+				var transactions = await query
+					.OrderByDescending(t => t.CreatedAt)
+					.Skip((request.PageNumber - 1) * request.PageSize)
+					.Take(request.PageSize)
+					.ToListAsync();
+
+				if (transactions == null) return new PagedResponse<List<Transaction>?>(null, 404, "Transactions not found");
+
+				var count = await query.CountAsync();
+
+				return new PagedResponse<List<Transaction>?>(transactions, count, request.PageNumber, request.PageSize);
+			}
+			catch
+			{
+				return new PagedResponse<List<Transaction>?>(null, 500, "Something went wrong");
+			}
 		}
 	}
 }
