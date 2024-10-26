@@ -14,6 +14,13 @@ namespace Dima.Api.Handlers
 		{
 			try
 			{
+				var category = await context
+					.Categories
+					.AsNoTracking()
+					.FirstOrDefaultAsync(c => c.Id == request.CategoryId && c.UserId == request.UserId);
+
+				if (category == null) return new Response<Transaction?>(null, 404, "Category informed was not found");
+
 				var transaction = new Transaction
 				{
 					UserId = request.UserId,
