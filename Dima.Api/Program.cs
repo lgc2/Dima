@@ -1,35 +1,16 @@
 using System.Security.Claims;
 using Dima.Api.Common.Api;
-using Dima.Api.Data;
 using Dima.Api.Endpoints;
-using Dima.Api.Handlers;
 using Dima.Api.Models;
-using Dima.Core;
-using Dima.Core.Handlers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguration();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(x => { x.CustomSchemaIds(n => n.FullName); });
-
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdentityCookies();
-builder.Services.AddAuthorization();
-
-builder.Services.AddDbContext<AppDbContext>(x =>
-{
-	x.UseSqlServer(Configuration.ConnectionString);
-});
-builder.Services
-	.AddIdentityCore<User>()
-	.AddRoles<IdentityRole<long>>()
-	.AddEntityFrameworkStores<AppDbContext>()
-	.AddApiEndpoints();
-
-builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
-builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
+builder.AddSecurity();
+builder.AddDataContexts();
+builder.AddCrossOrigin();
+builder.AddDocumentation();
+builder.AddServices();
 
 var app = builder.Build();
 
