@@ -41,3 +41,11 @@ dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet ef migrations add v2
 dotnet ef database update
 /* -------------- */
+
+dotnet new blazorwasm -o Dima.Web --pwa
+dotnet sln add ./Dima.Web/
+
+/* within Dima.Web */
+dotnet add package MudBlazor or dotnet add package MudBlazor --version 6.x.x
+
+/* -------------- */
