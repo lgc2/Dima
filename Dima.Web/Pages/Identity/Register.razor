@@ -1,7 +1,7 @@
-﻿@page "/login"
+﻿@page "/comecar"
 @layout HeadlessLayout
 
-<PageTitle>Dima - Entrar</PageTitle>
+<PageTitle>Dima - Registre-se</PageTitle>
 
 <MudGrid Justify="Justify.Center">
 	<MudItem xs="12" sm="12" md="8" lg="6" xl="6" xxl="6">
@@ -15,9 +15,9 @@
 				<MudTextField class="mt-4" T="string" Label="Senha" InputType="InputType.Password" Required="true" RequiredError="Senha inválida" />
 			</MudForm>
 			<div class="d-flex mt-8">
-				<MudButton Variant="Variant.Filled" Color="Color.Dark">ENTRAR</MudButton>
+				<MudButton Variant="Variant.Filled" Color="Color.Dark">COMEÇAR</MudButton>
 				<MudSpacer />
-				<MudButton Href="/comecar">REGISTRAR</MudButton>
+				<MudButton Href="/login">JÁ TENHO UMA CONTA</MudButton>
 			</div>
 		</MudPaper>
 	</MudItem>
