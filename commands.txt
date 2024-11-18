@@ -47,5 +47,5 @@ dotnet sln add ./Dima.Web/
 
 /* within Dima.Web */
 dotnet add package MudBlazor or dotnet add package MudBlazor --version 6.x.x
-
+dotnet add package Microsoft.Extensions.Http
 /* -------------- */
