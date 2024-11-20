@@ -1,5 +1,5 @@
 - Dima.Core - Class Lib (Client/Server)
-    - We can't have entity framework here because this lib will be in the client side too
+    - We can't have Entity Framework here because this lib will be in the client side too
 
 - Dima.Pwa - Blazor WASM (Client)
     - Core
@@ -48,4 +48,6 @@ dotnet sln add ./Dima.Web/
 /* within Dima.Web */
 dotnet add package MudBlazor or dotnet add package MudBlazor --version 6.x.x
 dotnet add package Microsoft.Extensions.Http
+dotnet add reference ../Dima.Core/
+
 /* -------------- */

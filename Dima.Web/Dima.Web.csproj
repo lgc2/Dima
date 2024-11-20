@@ -22,4 +22,8 @@
     <Folder Include="wwwroot\imgs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Dima.Core\Dima.Core.csproj" />
+  </ItemGroup>
+
 </Project>
