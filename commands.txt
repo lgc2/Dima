@@ -49,5 +49,5 @@ dotnet sln add ./Dima.Web/
 dotnet add package MudBlazor or dotnet add package MudBlazor --version 6.x.x
 dotnet add package Microsoft.Extensions.Http
 dotnet add reference ../Dima.Core/
-
+dotnet add package Microsoft.AspNetCore.Components.WebAssembly.Authentication
 /* -------------- */
