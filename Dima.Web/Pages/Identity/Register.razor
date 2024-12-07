@@ -10,16 +10,26 @@
 			<div class="d-flex justify-center pt-8 pb-8">
 				<img src="imgs/dima.png" alt="Dima - Controle Financeiro" width="200" />
 			</div>
-			<MudForm @ref="MudForm">
-				<MudTextField class="mt-4" T="string" Label="E-mail" InputType="InputType.Email" Required="true" RequiredError="Informe o E-mail"
-							  Validation="@(new EmailAddressAttribute{ErrorMessage = "E-mail inválido"})" />
-				<MudTextField class="mt-4" T="string" Label="Senha" InputType="InputType.Password" Required="true" RequiredError="Senha inválida" />
-			</MudForm>
-			<div class="d-flex mt-8">
-				<MudButton Variant="Variant.Filled" Color="Color.Primary">COMEÇAR</MudButton>
-				<MudSpacer />
-				<MudButton Href="/login">JÁ TENHO UMA CONTA</MudButton>
-			</div>
+			<EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+				<DataAnnotationsValidator />
+
+				<MudTextField class="mt-4" T="string" Label="E-mail" HelperText="Campo Obrigatório"
+							  InputType="InputType.Email" For="@(() => InputModel.Email)" @bind-Value="InputModel.Email" />
+				<MudTextField class="mt-4" T="string" Label="Senha" HelperText="Campo Obrigatório"
+							  InputType="InputType.Password" For="@(() => InputModel.Password)" @bind-Value="InputModel.Password" />
+				<div class="d-flex mt-8">
+					@if (IsBusy)
+					{
+						<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+					}
+					else
+					{
+						<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">COMEÇAR</MudButton>
+						<MudSpacer />
+						<MudButton Href="/login">JÁ TENHO UMA CONTA</MudButton>
+					}
+				</div>
+			</EditForm>
 		</MudPaper>
 	</MudItem>
 </MudGrid>
