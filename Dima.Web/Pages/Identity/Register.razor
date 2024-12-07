@@ -1,5 +1,6 @@
 ﻿@page "/comecar"
 @layout HeadlessLayout
+@inherits RegisterPage
 
 <PageTitle>Dima - Registre-se</PageTitle>
 
@@ -9,7 +10,7 @@
 			<div class="d-flex justify-center pt-8 pb-8">
 				<img src="imgs/dima.png" alt="Dima - Controle Financeiro" width="200" />
 			</div>
-			<MudForm @ref="_mudForm">
+			<MudForm @ref="MudForm">
 				<MudTextField class="mt-4" T="string" Label="E-mail" InputType="InputType.Email" Required="true" RequiredError="Informe o E-mail"
 							  Validation="@(new EmailAddressAttribute{ErrorMessage = "E-mail inválido"})" />
 				<MudTextField class="mt-4" T="string" Label="Senha" InputType="InputType.Password" Required="true" RequiredError="Senha inválida" />
@@ -22,7 +23,3 @@
 		</MudPaper>
 	</MudItem>
 </MudGrid>
-
-@code {
-	MudForm? _mudForm;
-}
