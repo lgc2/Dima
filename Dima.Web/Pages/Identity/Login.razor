@@ -1,5 +1,6 @@
 ﻿@page "/login"
 @layout HeadlessLayout
+@inherits LoginPage
 
 <PageTitle>Dima - Entrar</PageTitle>
 
@@ -9,20 +10,26 @@
 			<div class="d-flex justify-center pt-8 pb-8">
 				<img src="imgs/dima.png" alt="Dima - Controle Financeiro" width="200" />
 			</div>
-			<MudForm @ref="_mudForm">
-				<MudTextField class="mt-4" T="string" Label="E-mail" InputType="InputType.Email" Required="true" RequiredError="Informe o E-mail"
-							  Validation="@(new EmailAddressAttribute{ErrorMessage = "E-mail inválido"})" />
-				<MudTextField class="mt-4" T="string" Label="Senha" InputType="InputType.Password" Required="true" RequiredError="Senha inválida" />
-			</MudForm>
-			<div class="d-flex mt-8">
-				<MudButton Variant="Variant.Filled" Color="Color.Primary">ENTRAR</MudButton>
-				<MudSpacer />
-				<MudButton Href="/comecar">REGISTRAR</MudButton>
-			</div>
+			<EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+				<DataAnnotationsValidator />
+
+				<MudTextField class="mt-4" T="string" Label="E-mail" HelperText="Campo Obrigatório"
+							  InputType="InputType.Email" For="@(() => InputModel.Email)" @bind-Value="InputModel.Email" />
+				<MudTextField class="mt-4" T="string" Label="Senha" HelperText="Campo Obrigatório"
+							  InputType="InputType.Password" For="@(() => InputModel.Password)" @bind-Value="InputModel.Password" />
+				<div class="d-flex mt-8">
+					@if (IsBusy)
+					{
+						<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+					}
+					else
+					{
+						<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">ENTRAR</MudButton>
+						<MudSpacer />
+						<MudButton Href="/comecar">QUERO ME CADASTRAR</MudButton>
+					}
+				</div>
+			</EditForm>
 		</MudPaper>
 	</MudItem>
 </MudGrid>
-
-@code {
-	MudForm? _mudForm;
-}
