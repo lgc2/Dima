@@ -11,7 +11,7 @@
 				Dima
 				<MudSpacer />
 				<MudText Typo="Typo.caption">@context.User.Identity?.Name</MudText>
-				<MudSwitch Color="Color.Inherit" @bind-Value="@_isDarkMode" T="bool" Class="ma-4" ThumbIcon="@Icons.Material.TwoTone.Lightbulb" />
+				<MudSwitch Color="Color.Inherit" Value="@_isDarkMode" ValueChanged="OnDarkModeChanged" T="bool" Class="ma-4" ThumbIcon="@Icons.Material.TwoTone.Lightbulb" />
 			</MudAppBar>
 			<MudDrawer @bind-Open="@_isDrawerOpend">
 				<NavMenu />
@@ -29,6 +29,8 @@
 </AuthorizeView>
 
 @code {
+	[Inject] private IJSRuntime JS { get; set; } = null!;
+
 	private bool _isDrawerOpend = true;
 	private bool _isDarkMode = true;
 
@@ -39,8 +41,18 @@
 	{
 		if (firstRender)
 		{
-			_isDarkMode = await _mudThemeProvider.GetSystemPreference();
-			await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+			var storedTheme = await JS.InvokeAsync<string>("localStorage.getItem", "darkMode");
+
+			if (storedTheme != null)
+			{
+				_isDarkMode = storedTheme == "true";
+			}
+			else
+			{
+				_isDarkMode = await _mudThemeProvider.GetSystemPreference();
+				await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+			}
+
 			StateHasChanged();
 		}
 	}
@@ -50,6 +62,12 @@
 		_isDarkMode = newValue;
 		StateHasChanged();
 		return Task.CompletedTask;
+	}
+
+	private async Task OnDarkModeChanged(bool newValue)
+	{
+		_isDarkMode = newValue;
+		await JS.InvokeVoidAsync("localStorage.setItem", "darkMode", _isDarkMode.ToString().ToLower());
 	}
 
 	private void ToggleDrawer() => _isDrawerOpend = !_isDrawerOpend;
