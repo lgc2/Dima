@@ -104,7 +104,7 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
 		try
 		{
 			var categories = await query
-				.OrderBy(c => c.Title)
+				.OrderBy(c => c.Id)
 				.Skip((request.PageNumber - 1) * request.PageSize)
 				.Take(request.PageSize)
 				.ToListAsync();

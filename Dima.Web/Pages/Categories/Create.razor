@@ -17,8 +17,15 @@
 					  @bind-Value="InputModel.Description"
 					  For="@(() => InputModel.Description)" />
 
-		<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
-			Salvar
-		</MudButton>
+		@if (IsBusy)
+		{
+			<MudProgressCircular Color="Color.Info" Indeterminate="true" />
+		}
+		else
+		{
+			<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+				Salvar
+			</MudButton>
+		}
 	</EditForm>
 </MudPaper>
