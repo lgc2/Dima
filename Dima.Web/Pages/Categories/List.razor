@@ -2,10 +2,18 @@
 @inherits ListCategoriesPage
 
 <MudText Typo="Typo.h3">Categorias</MudText>
+<div class="d-flex justify-end my-4">
+	<MudButton Variant="Variant.Filled"
+			   Color="Color.Primary"
+			   StartIcon="@Icons.Material.TwoTone.Add"
+			   Href="/categorias/adicionar">
+		NOVA CATEGORIA
+	</MudButton>
+</div>
 
-<ul>
-	@foreach (var cat in Categories)
-	{
-		<li>@cat.Title</li>
-	}
-</ul>
+<MudDataGrid Items="@Categories">
+	<Columns>
+		<PropertyColumn Property="x => x.Id" Title="#" />
+		<PropertyColumn Property="x => x.Title" Title="Categoria" />
+	</Columns>
+</MudDataGrid>
