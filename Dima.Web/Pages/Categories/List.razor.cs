@@ -67,5 +67,32 @@ public partial class ListCategoriesPage : ComponentBase
 		return false;
 	};
 
+	public async Task DeleteAsync(DeleteCategoryRequest request)
+	{
+		IsBusy = true;
+
+		try
+		{
+			var result = await Handler.DeleteAsync(request);
+			if (result.IsSuccess)
+				Snackbar.Add(result.Message, Severity.Success);
+			else
+				Snackbar.Add(result.Message, Severity.Error);
+
+			var getAllRequest = new GetAllCategoriesRequest();
+			var getAllResult = await Handler.GetAllAsync(getAllRequest);
+			if (getAllResult.IsSuccess)
+				Categories = getAllResult.Data ?? [];
+		}
+		catch (Exception ex)
+		{
+			Snackbar.Add(ex.Message, Severity.Error);
+		}
+		finally
+		{
+			IsBusy = false;
+		}
+	}
+
 	#endregion
 }
