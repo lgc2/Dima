@@ -32,7 +32,7 @@
 					<MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/categorias/editar/{context.Item.Id}")" Color="Color.Info" />
 					<MudIconButton Icon="@Icons.Material.Filled.Delete"
 								   Color="Color.Error" aria-label="Excluir"
-								   OnClick="() => DeleteAsync( new Core.Requests.Categories.DeleteCategoryRequest { Id = context.Item.Id})" />
+								   OnClick="() => OnDeleteButtonClickedAsync(context.Item.Id, context.Item.Title)" />
 				</MudStack>
 			</CellTemplate>
 		</TemplateColumn>
