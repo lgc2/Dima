@@ -56,4 +56,5 @@ dotnet workload install wasm-tools --> install it in order to be able to debug t
 /*     tests      */
 dotnet new xunit -o Dima.Api.IntegrationTests
 dotnet sln add ./tests/IntegrationTests/Dima.Api.IntegrationTests.csproj
+dotnet add reference ../../../Dima.Core/
 /* -------------- */
