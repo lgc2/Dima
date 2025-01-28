@@ -4,12 +4,10 @@ namespace Dima.Api.IntegrationTests;
 
 public class CategoriesIntegrationTests : IClassFixture<TestFixture>
 {
-	private readonly AccountClient _accountClient;
 	private readonly CategoriesClient _categoriesClient;
 
 	public CategoriesIntegrationTests()
 	{
-		_accountClient = new AccountClient();
 		_categoriesClient = new CategoriesClient();
 	}
 
