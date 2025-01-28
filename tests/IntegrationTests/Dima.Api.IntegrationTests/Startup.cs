@@ -9,7 +9,10 @@ public class Startup
 	public static void ConfigureServices()
 	{
 		var serviceCollection = new ServiceCollection();
-		serviceCollection.AddHttpClient();
+		serviceCollection.AddHttpClient("dima", client =>
+		{
+			client.BaseAddress = new Uri(Configuration.BackendUrl);
+		});
 		ServiceProvider = serviceCollection.BuildServiceProvider();
 	}
 }
