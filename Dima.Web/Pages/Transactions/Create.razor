@@ -1,1 +1,25 @@
-﻿
+﻿@page "/lancamentos/novo"
+@inherits CreateTransactionPage
+
+<MudText Typo="Typo.h3">Novo Lançamento</MudText>
+
+<MudPaper Class="pa-8 mt-4">
+	<EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+		<DataAnnotationsValidator />
+
+		<MudTextField Label="Título"
+					  HelperText="Campo obrigatório"
+					  @bind-Value="InputModel.Title"
+					  For="@(()=>InputModel.Title)"
+					  Class="mb-4" />
+
+		<MudTextField Label="Quanto?"
+					  T="decimal"
+					  Format="C"
+					  Variant="Variant.Text"
+					  HelperText="Informe o valor que será pago ou recebido"
+					  @bind-Value="InputModel.Amount"
+					  For="@(()=>InputModel.Amount)"
+					  Class="mb-4" />
+	</EditForm>
+</MudPaper>
