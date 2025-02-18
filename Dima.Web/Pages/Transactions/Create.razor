@@ -21,5 +21,19 @@
 					  @bind-Value="InputModel.Amount"
 					  For="@(()=>InputModel.Amount)"
 					  Class="mb-4" />
+
+		<MudDatePicker Label="Quando?"
+					   @bind-Date="@InputModel.PaidOrReceivedAt"
+					   HelperText="Selecione a data que o valor será pago ou recebido"
+					   Class="mb-4" />
+
+		<MudSelect T="ETransactionType"
+				   Label="Tipo de movimentação"
+				   AnchorOrigin="Origin.BottomCenter"
+				   @bind-Value="@InputModel.Type"
+				   Class="mb-4">
+			<MudSelectItem T="ETransactionType" Value="ETransactionType.Deposit">Entrada</MudSelectItem>
+			<MudSelectItem T="ETransactionType" Value="ETransactionType.Withdraw">Saída</MudSelectItem>
+		</MudSelect>
 	</EditForm>
 </MudPaper>
