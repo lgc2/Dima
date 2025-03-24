@@ -12,6 +12,12 @@ namespace Dima.Api.Handlers
 	{
 		public async Task<Response<Transaction?>> CreateAsync(CreateTransactionRequest request)
 		{
+			if (request.Type == Core.Enums.ETransactionType.Withdraw && request.Amount > 0)
+				request.Amount *= -1;
+
+			if (request.Type == Core.Enums.ETransactionType.Deposit && request.Amount <= 0)
+				return new Response<Transaction?>(null, 400, "A Deposit must have the amount greater than zero");
+
 			try
 			{
 				var category = await context
@@ -44,6 +50,12 @@ namespace Dima.Api.Handlers
 
 		public async Task<Response<Transaction?>> UpdateAsync(UpdateTransactionRequest request)
 		{
+			if (request.Type == Core.Enums.ETransactionType.Withdraw && request.Amount > 0)
+				request.Amount *= -1;
+
+			if (request.Type == Core.Enums.ETransactionType.Deposit && request.Amount <= 0)
+				return new Response<Transaction?>(null, 400, "A Deposit must have the amount greater than zero");
+
 			try
 			{
 				var transaction = await context
