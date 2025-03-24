@@ -13,22 +13,34 @@ public class CategoryHandler(IHttpClientFactory httpClientFactory) : ICategoryHa
 	public async Task<Response<Category?>> CreateAsync(CreateCategoryRequest request)
 	{
 		var result = await _client.PostAsJsonAsync("v1/categories", request);
-		return await result.Content.ReadFromJsonAsync<Response<Category?>>()
-			?? new Response<Category?>(null, 400, "Falha ao criar categoria");
+		var content = await result.Content.ReadFromJsonAsync<Response<Category?>>();
+
+		if (content is null)
+			return new Response<Category?>(null, 400, "Falha ao criar categoria");
+
+		return new Response<Category?>(content.Data, (int)result.StatusCode, content.Message);
 	}
 
 	public async Task<Response<Category?>> UpdateAsync(UpdateCategoryRequest request)
 	{
 		var result = await _client.PutAsJsonAsync($"v1/categories/{request.Id}", request);
-		return await result.Content.ReadFromJsonAsync<Response<Category?>>()
-			?? new Response<Category?>(null, 400, "Falha ao atualizar a categoria");
+		var content = await result.Content.ReadFromJsonAsync<Response<Category?>>();
+
+		if (content is null)
+			return new Response<Category?>(null, 400, "Falha ao atualizar a categoria");
+
+		return new Response<Category?>(content.Data, (int)result.StatusCode, content.Message);
 	}
 
 	public async Task<Response<Category?>> DeleteAsync(DeleteCategoryRequest request)
 	{
 		var result = await _client.DeleteAsync($"v1/categories/{request.Id}");
-		return await result.Content.ReadFromJsonAsync<Response<Category?>>()
-			?? new Response<Category?>(null, 400, "Falha ao excluir a categoria");
+		var content = await result.Content.ReadFromJsonAsync<Response<Category?>>();
+
+		if (content is null)
+			return new Response<Category?>(null, 400, "Falha ao excluir a categoria");
+
+		return new Response<Category?>(content.Data, (int)result.StatusCode, content.Message);
 	}
 
 	public async Task<Response<Category?>> GetByIdAsync(GetCategoryByIdRequest request) =>

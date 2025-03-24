@@ -14,22 +14,34 @@ public class TransactionHandler(IHttpClientFactory httpClientFactory) : ITransac
 	public async Task<Response<Transaction?>> CreateAsync(CreateTransactionRequest request)
 	{
 		var result = await _client.PostAsJsonAsync("v1/transactions", request);
-		return await result.Content.ReadFromJsonAsync<Response<Transaction?>>()
-			?? new Response<Transaction?>(null, 400, "Falha ao criar transação");
+		var content = await result.Content.ReadFromJsonAsync<Response<Transaction?>>();
+
+		if (content is null)
+			return new Response<Transaction?>(null, 400, "Falha ao criar transação");
+
+		return new Response<Transaction?>(content.Data, (int)result.StatusCode, content.Message);
 	}
 
 	public async Task<Response<Transaction?>> UpdateAsync(UpdateTransactionRequest request)
 	{
 		var result = await _client.PutAsJsonAsync($"v1/transactions/{request.Id}", request);
-		return await result.Content.ReadFromJsonAsync<Response<Transaction?>>()
-			?? new Response<Transaction?>(null, 400, "Falha ao atualizar a transação");
+		var content = await result.Content.ReadFromJsonAsync<Response<Transaction?>>();
+
+		if (content is null)
+			return new Response<Transaction?>(null, 400, "Falha ao atualizar a transação");
+
+		return new Response<Transaction?>(content.Data, (int)result.StatusCode, content.Message);
 	}
 
 	public async Task<Response<Transaction?>> DeleteAsync(DeleteTransactionRequest request)
 	{
 		var result = await _client.DeleteAsync($"v1/transactions/{request.Id}");
-		return await result.Content.ReadFromJsonAsync<Response<Transaction?>>()
-			?? new Response<Transaction?>(null, 400, "Falha ao excluir a transação");
+		var content = await result.Content.ReadFromJsonAsync<Response<Transaction?>>();
+
+		if (content is null)
+			return new Response<Transaction?>(null, 400, "Falha ao excluir a transação");
+
+		return new Response<Transaction?>(content.Data, (int)result.StatusCode, content.Message);
 	}
 
 	public async Task<Response<Transaction?>> GetByIdAsync(GetTransactionByIdRequest request) =>
