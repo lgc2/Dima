@@ -56,6 +56,19 @@ public partial class ListTransactionsPage : ComponentBase
 		|| transaction.Title.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase);
 	};
 
+	public async Task OnDeleteButtonClickedAsync(long id, string title)
+	{
+		var result = await DialogService.ShowMessageBox("ATENÇÂO",
+			$"Ao prosseguir, o lançamento \"{title}\" será excluído. Esta é uma ação irreversível! Deseja continuar?",
+			yesText: "EXCLUIR",
+			cancelText: "Cancelar");
+
+		if (result is true)
+			await OnDeleteAsync(id, title);
+
+		StateHasChanged();
+	}
+
 	#endregion
 
 	#region PrivateMethods
@@ -82,6 +95,31 @@ public partial class ListTransactionsPage : ComponentBase
 			Snackbar.Add(ex.Message, Severity.Error);
 		}
 		finally { IsBusy = false; }
+	}
+
+	private async Task OnDeleteAsync(long id, string title)
+	{
+		IsBusy = true;
+
+		try
+		{
+			var result = await Handler.DeleteAsync(new DeleteTransactionRequest { Id = id });
+			if (result.IsSuccess)
+			{
+				Snackbar.Add($"Lançamento \"{title}\" excluído.", Severity.Success);
+				Transactions.RemoveAll(c => c.Id == id);
+			}
+			else
+				Snackbar.Add(result.Message, Severity.Error);
+		}
+		catch (Exception ex)
+		{
+			Snackbar.Add(ex.Message, Severity.Error);
+		}
+		finally
+		{
+			IsBusy = false;
+		}
 	}
 
 	#endregion
