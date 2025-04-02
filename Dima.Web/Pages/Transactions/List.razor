@@ -10,11 +10,39 @@
 		NOVO LANÇAMENTO
 	</MudButton>
 </div>
+<div class="d-flex justify-end" mt-4 mb-4>
+	<MudSelect T="int" Label="Mês" @bind-Value="CurrentMonth" AnchorOrigin="Origin.BottomCenter" Class="mr-4">
+		@for (var month = 1; month <= 12; month++)
+		{
+			var date = new DateTime(DateTime.UtcNow.Year, month, 1);
+			<MudSelectItem T="int" Value="@month">
+				@(date.ToString("MMMM"))
+			</MudSelectItem>
+		}
+	</MudSelect>
+	<MudSelect T="int" Label="Ano" @bind-Value="CurrentYear" AnchorOrigin="Origin.BottomCenter">
+		@foreach (var year in Years)
+		{
+			<MudSelectItem T="int" Value="@year">
+				@year
+			</MudSelectItem>
+		}
+	</MudSelect>
+	<MudSpacer />
+	<MudButton Size="Size.Small"
+			   Variant="Variant.Text"
+			   Color="Color.Primary"
+			   StartIcon="@Icons.Material.TwoTone.Search"
+			   OnClick="OnSearchAsync">
+		PESQUISAR
+	</MudButton>
+</div>
 <MudDataGrid Items="@Transactions"
 			 Filterable="false"
 			 QuickFilter="Filter"
 			 Hideable="true"
-			 ColumnResizeMode="ResizeMode.Column">
+			 ColumnResizeMode="ResizeMode.Column"
+			 Class="mt-4">
 	<ToolBarContent>
 		<MudText Typo="Typo.h6">Lançamentos</MudText>
 		<MudSpacer />

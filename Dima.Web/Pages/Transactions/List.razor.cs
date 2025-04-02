@@ -41,7 +41,7 @@ public partial class ListTransactionsPage : ComponentBase
 
 	#region Overrides
 
-	protected override async Task OnInitializedAsync() => await GetTransactions();
+	protected override async Task OnInitializedAsync() => await GetTransactionsAsync();
 
 	#endregion
 
@@ -69,11 +69,17 @@ public partial class ListTransactionsPage : ComponentBase
 		StateHasChanged();
 	}
 
+	public async Task OnSearchAsync()
+	{
+		await GetTransactionsAsync();
+		StateHasChanged();
+	}
+
 	#endregion
 
 	#region PrivateMethods
 
-	private async Task GetTransactions()
+	private async Task GetTransactionsAsync()
 	{
 		IsBusy = true;
 
