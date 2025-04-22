@@ -138,12 +138,12 @@ namespace Dima.Api.Handlers
 			var query = context
 					.Transactions
 					.AsNoTracking()
-					.Where(t => t.UserId == request.UserId && (t.CreatedAt >= request.StartDate && t.CreatedAt <= request.EndDate));
+					.Where(t => t.UserId == request.UserId && (t.PaidOrReceivedAt >= request.StartDate && t.PaidOrReceivedAt <= request.EndDate));
 
 			try
 			{
 				var transactions = await query
-					.OrderByDescending(t => t.CreatedAt)
+					.OrderByDescending(t => t.PaidOrReceivedAt)
 					.Skip((request.PageNumber - 1) * request.PageSize)
 					.Take(request.PageSize)
 					.ToListAsync();
