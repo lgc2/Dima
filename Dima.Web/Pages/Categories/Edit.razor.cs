@@ -73,8 +73,8 @@ namespace Dima.Web.Pages.Categories
 			{
 				Snackbar.Add(ex.Message, Severity.Error);
 			}
+			
 			finally { IsBusy = false; }
-
 		}
 
 		#endregion

@@ -29,7 +29,7 @@ public partial class CreateTransactionPage : ComponentBase
 	public NavigationManager NavigationManager { get; set; } = null!;
 
 	[Inject]
-	public ISnackbar Snackbar { get; set; }
+	public ISnackbar Snackbar { get; set; } = null!;
 
 	#endregion
 
