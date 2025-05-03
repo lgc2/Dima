@@ -1,6 +1,7 @@
 ﻿using Dima.Api.Common.Api;
 using Dima.Api.Endpoints.Categories;
 using Dima.Api.Endpoints.Identity;
+using Dima.Api.Endpoints.Reports;
 using Dima.Api.Endpoints.Transactions;
 using Dima.Api.Models;
 
@@ -43,6 +44,11 @@ public static class Endpoint
 			.WithTags("Identity")
 			.MapEndpoint<LogoutEndpoint>()
 			.MapEndpoint<GetRolesEndpoint>();
+
+		endpoints.MapGroup("v1/charts")
+			.WithTags("Charts")
+			.RequireAuthorization()
+			.MapEndpoint<GetIncomesAndExpansesEndpoint>();
 	}
 
 	private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint
