@@ -48,7 +48,22 @@ public static class Endpoint
 		endpoints.MapGroup("v1/charts")
 			.WithTags("Charts")
 			.RequireAuthorization()
-			.MapEndpoint<GetIncomesAndExpansesEndpoint>();
+			.MapEndpoint<GetIncomesAndExpensesEndpoint>();
+		
+		endpoints.MapGroup("v1/charts")
+			.WithTags("Charts")
+			.RequireAuthorization()
+			.MapEndpoint<GetIncomesByCategoryEndpoint>();
+		
+		endpoints.MapGroup("v1/charts")
+			.WithTags("Charts")
+			.RequireAuthorization()
+			.MapEndpoint<GetExpensesByCategoryEndpoint>();
+		
+		endpoints.MapGroup("v1/charts")
+			.WithTags("Charts")
+			.RequireAuthorization()
+			.MapEndpoint<GetFinancialSummaryEndpoint>();
 	}
 
 	private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint

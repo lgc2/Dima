@@ -7,19 +7,19 @@ using Dima.Core.Responses;
 
 namespace Dima.Api.Endpoints.Reports;
 
-public class GetIncomesAndExpansesEndpoint : IEndpoint
+public class GetIncomesAndExpensesEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) =>
-        app.MapGet("/incomes-and-expanses", HandleAsync)
-            .WithName("Reports: Get Incomes And Expanses")
-            .WithSummary("Get Incomes And Expanses")
-            .WithDescription("Get Incomes And Expanses")
+        app.MapGet("/incomes-and-expenses", HandleAsync)
+            .WithName("Reports: Get Incomes And Expenses")
+            .WithSummary("Get Incomes And Expenses")
+            .WithDescription("Get Incomes And Expenses")
             .WithOrder(1)
             .Produces<Response<List<IncomesAndExpenses>?>>();
 
     private static async Task<IResult> HandleAsync(ClaimsPrincipal user, IReportHandler handler)
     {
-        var request = new GetIncomesAndExpansesRequest() { UserId = user.Identity?.Name ?? String.Empty };
+        var request = new GetIncomesAndExpansesRequest { UserId = user.Identity?.Name ?? String.Empty };
 
         var result = await handler.GetIncomesAndExpensesReportAsync(request);
 
