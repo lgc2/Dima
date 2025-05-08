@@ -45,24 +45,12 @@ public static class Endpoint
 			.MapEndpoint<LogoutEndpoint>()
 			.MapEndpoint<GetRolesEndpoint>();
 
-		endpoints.MapGroup("v1/charts")
-			.WithTags("Charts")
+		endpoints.MapGroup("v1/reports")
+			.WithTags("Reports")
 			.RequireAuthorization()
-			.MapEndpoint<GetIncomesAndExpensesEndpoint>();
-		
-		endpoints.MapGroup("v1/charts")
-			.WithTags("Charts")
-			.RequireAuthorization()
-			.MapEndpoint<GetIncomesByCategoryEndpoint>();
-		
-		endpoints.MapGroup("v1/charts")
-			.WithTags("Charts")
-			.RequireAuthorization()
-			.MapEndpoint<GetExpensesByCategoryEndpoint>();
-		
-		endpoints.MapGroup("v1/charts")
-			.WithTags("Charts")
-			.RequireAuthorization()
+			.MapEndpoint<GetIncomesAndExpensesEndpoint>()
+			.MapEndpoint<GetIncomesByCategoryEndpoint>()
+			.MapEndpoint<GetExpensesByCategoryEndpoint>()
 			.MapEndpoint<GetFinancialSummaryEndpoint>();
 	}
 
