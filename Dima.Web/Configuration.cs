@@ -13,7 +13,7 @@ public static class Configuration
 	{
 		Typography = new()
 		{
-			Default = new()
+			Default = new DefaultTypography()
 			{
 				FontFamily = ["Raleway", "sans-serif"]
 			}
