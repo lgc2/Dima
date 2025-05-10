@@ -1,0 +1,12 @@
+@page "/relatorios/receitas-e-despesas"
+@inherits IncomesAndExpensesPage
+
+<MudText Typo="Typo.h3">Receitas e Despesas</MudText>
+
+<MudPaper Class="doc-section-component-container my-4">
+    <MudChart ChartType="ChartType.Bar"
+              ChartSeries="@Series"
+              XAxisLabels="@XAxisLabels"
+              Width="100%"
+              Height="350px" />
+</MudPaper>
