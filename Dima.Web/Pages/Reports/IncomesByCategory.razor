@@ -1,0 +1,13 @@
+@page "/relatorios/receitas"
+@inherits IncomesByCategoryPage
+
+<MudText Typo="Typo.h3">Receitas</MudText>
+
+<MudPaper Class="doc-section-component-container my-4">
+    <MudChart ChartType="ChartType.Bar"
+              ChartSeries="@Series"
+              XAxisLabels="@XAxisLabels"
+              Width="@Width"
+              Height="@Height"
+              ChartOptions="@ChartOptions" />
+</MudPaper>

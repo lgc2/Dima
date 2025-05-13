@@ -9,6 +9,9 @@ namespace Dima.Web.Pages.Reports;
 public partial class IncomesAndExpensesPage : ComponentBase
 {
 	#region Properties
+	
+	protected readonly string Width = "100%";
+	protected readonly string Height = "350px";
 
 	protected ChartOptions ChartOptions = new()
 	{
