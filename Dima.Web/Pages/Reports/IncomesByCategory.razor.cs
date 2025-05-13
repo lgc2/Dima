@@ -1,4 +1,3 @@
-using System.Globalization;
 using Dima.Core.Handlers;
 using Dima.Core.Requests.Reports;
 using Microsoft.AspNetCore.Components;
@@ -13,17 +12,9 @@ public partial class IncomesByCategoryPage : ComponentBase
     protected readonly string Width = "100%";
     protected readonly string Height = "350px";
 
-    protected ChartOptions ChartOptions = new()
-    {
-        YAxisFormat = "C2"
-    };
-    
-    protected List<ChartSeries> Series = new List<ChartSeries>()
-    {
-        new ChartSeries() { Name = "Receitas", Data = [] },
-    };
-
-    protected string[] XAxisLabels = [];
+    protected int DataSize = 0;
+    protected double[] Data = [];
+    protected string[] Labels = [];
 
     #endregion
 
@@ -49,9 +40,9 @@ public partial class IncomesByCategoryPage : ComponentBase
                 return;
             }
 
-            XAxisLabels = result.Data.Select(x => x.Category).ToArray();
-            
-            Series[0].Data = result.Data.Select(x => (double)x.Incomes).ToArray();
+            DataSize = result.Data.Count;
+            Data = result.Data.Select(x => (double)x.Incomes).ToArray();
+            Labels = result.Data.Select(x => x.Category).ToArray();
         }
         catch (Exception ex)
         {
