@@ -12,7 +12,6 @@ public partial class IncomesByCategoryPage : ComponentBase
     protected readonly string Width = "100%";
     protected readonly string Height = "350px";
 
-    protected int DataSize = 0;
     protected double[] Data = [];
     protected string[] Labels = [];
 
@@ -40,7 +39,6 @@ public partial class IncomesByCategoryPage : ComponentBase
                 return;
             }
 
-            DataSize = result.Data.Count;
             Data = result.Data.Select(x => (double)x.Incomes).ToArray();
             Labels = result.Data.Select(x => x.Category).ToArray();
         }

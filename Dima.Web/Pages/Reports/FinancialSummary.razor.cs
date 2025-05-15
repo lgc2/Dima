@@ -5,15 +5,16 @@ using MudBlazor;
 
 namespace Dima.Web.Pages.Reports;
 
-public partial class ExpensesByCategoryPage : ComponentBase
+public class FinancialSummaryPage : ComponentBase
 {
     #region Properties
-    
+
     protected readonly string Width = "100%";
     protected readonly string Height = "350px";
 
-    protected double[] Data = [];
-    protected string[] Labels = [];
+    protected double[] Data = new double[2];
+    protected string[] Labels = ["Receitas", "Despesas"];
+    protected string Total = String.Empty;
 
     #endregion
 
@@ -24,14 +25,14 @@ public partial class ExpensesByCategoryPage : ComponentBase
     [Inject] public IReportHandler Handler { get; set; } = null!;
 
     #endregion
-    
-    protected override async Task OnInitializedAsync() => await GetExpensesByCategoryAsync();
 
-    private async Task GetExpensesByCategoryAsync()
+    protected override async Task OnInitializedAsync() => await GetFinancialSummaryAsync();
+
+    private async Task GetFinancialSummaryAsync()
     {
         try
         {
-            var result = await Handler.GetExpensesByCategoryReportAsync(new GetExpensesByCategoryRequest());
+            var result = await Handler.GetFinancialSummaryReportAsync(new GetFinancialSummaryRequest());
 
             if (!result.IsSuccess || result.Data is null)
             {
@@ -39,8 +40,9 @@ public partial class ExpensesByCategoryPage : ComponentBase
                 return;
             }
 
-            Data = result.Data.Select(x => (double)x.Expenses * -1).ToArray();
-            Labels = result.Data.Select(x => x.Category).ToArray();
+            Data[0] = (double)result.Data.Incomes;
+            Data[1] = -(double)result.Data.Expenses;
+            Total = result.Data.Total.ToString("C2");
         }
         catch (Exception ex)
         {
