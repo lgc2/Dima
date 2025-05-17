@@ -8,6 +8,8 @@ namespace Dima.Web.Pages.Reports;
 public class FinancialSummaryPage : ComponentBase
 {
     #region Properties
+    
+    protected bool ThereIsDataToShow = false;
 
     protected readonly string Width = "100%";
     protected readonly string Height = "350px";
@@ -34,11 +36,16 @@ public class FinancialSummaryPage : ComponentBase
         {
             var result = await Handler.GetFinancialSummaryReportAsync(new GetFinancialSummaryRequest());
 
-            if (!result.IsSuccess || result.Data is null)
+            if (!result.IsSuccess)
             {
                 Snackbar.Add("Falha ao obter o relatório", Severity.Error);
                 return;
             }
+
+            if (result.Data is null)
+                return;
+
+            ThereIsDataToShow = true;
 
             Data[0] = (double)result.Data.Incomes;
             Data[1] = -(double)result.Data.Expenses;
