@@ -10,86 +10,87 @@ namespace Dima.Api.Handlers;
 
 public class ReportHandler(AppDbContext context) : IReportHandler
 {
-    public async Task<Response<List<IncomesAndExpenses>?>> GetIncomesAndExpensesReportAsync(GetIncomesAndExpansesRequest request)
-    {
-        try
-        {
-            var data = await context.IncomesAndExpenses
-                .AsNoTracking()
-                .Where(x => x.UserId == request.UserId)
-                .OrderByDescending(x => x.Year)
-                .ThenBy(x => x.Month)
-                .ToListAsync();
+	public async Task<Response<List<IncomesAndExpenses>?>> GetIncomesAndExpensesReportAsync(GetIncomesAndExpansesRequest request)
+	{
+		try
+		{
+			var data = await context.IncomesAndExpenses
+				.AsNoTracking()
+				.Where(x => x.UserId == request.UserId)
+				.OrderByDescending(x => x.Year)
+				.ThenBy(x => x.Month)
+				.ToListAsync();
 
-            return new Response<List<IncomesAndExpenses>?>(data);
-        }
-        catch
-        {
-            return new Response<List<IncomesAndExpenses>?>(null, 500, "Something went wrong");
-        }
-    }
+			return new Response<List<IncomesAndExpenses>?>(data);
+		}
+		catch
+		{
+			return new Response<List<IncomesAndExpenses>?>(null, 500, "Something went wrong");
+		}
+	}
 
-    public async Task<Response<List<IncomesByCategory>?>> GetIncomesByCategoryReportAsync(GetIncomesByCategoryRequest request)
-    {
-        try
-        {
-            var data = await context.IncomesByCategories
-                .AsNoTracking()
-                .Where(x => x.UserId == request.UserId)
-                .OrderByDescending(x => x.Year)
-                .ThenBy(x => x.Category)
-                .ToListAsync();
+	public async Task<Response<List<IncomesByCategory>?>> GetIncomesByCategoryReportAsync(GetIncomesByCategoryRequest request)
+	{
+		try
+		{
+			var data = await context.IncomesByCategories
+				.AsNoTracking()
+				.Where(x => x.UserId == request.UserId)
+				.OrderByDescending(x => x.Year)
+				.ThenBy(x => x.Category)
+				.ToListAsync();
 
-            return new Response<List<IncomesByCategory>?>(data);
-        }
-        catch
-        {
-            return new Response<List<IncomesByCategory>?>(null, 500, "Something went wrong");
-        }
-    }
+			return new Response<List<IncomesByCategory>?>(data);
+		}
+		catch
+		{
+			return new Response<List<IncomesByCategory>?>(null, 500, "Something went wrong");
+		}
+	}
 
-    public async Task<Response<List<ExpensesByCategory>?>> GetExpensesByCategoryReportAsync(GetExpensesByCategoryRequest request)
-    {
-        try
-        {
-            var data = await context.ExpensesByCategories
-                .AsNoTracking()
-                .Where(x => x.UserId == request.UserId)
-                .OrderByDescending(x => x.Year)
-                .ThenBy(x => x.Category)
-                .ToListAsync();
+	public async Task<Response<List<ExpensesByCategory>?>> GetExpensesByCategoryReportAsync(GetExpensesByCategoryRequest request)
+	{
+		try
+		{
+			var data = await context.ExpensesByCategories
+				.AsNoTracking()
+				.Where(x => x.UserId == request.UserId)
+				.OrderByDescending(x => x.Year)
+				.ThenBy(x => x.Category)
+				.ToListAsync();
 
-            return new Response<List<ExpensesByCategory>?>(data);
-        }
-        catch
-        {
-            return new Response<List<ExpensesByCategory>?>(null, 500, "Something went wrong");
-        }
-    }
+			return new Response<List<ExpensesByCategory>?>(data);
+		}
+		catch
+		{
+			return new Response<List<ExpensesByCategory>?>(null, 500, "Something went wrong");
+		}
+	}
 
-    public async Task<Response<FinancialSummary?>> GetFinancialSummaryReportAsync(GetFinancialSummaryRequest request)
-    {
-        var startDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
-        
-        try
-        {
-            var data = await context.Transactions
-                .AsNoTracking()
-                .Where(x => x.UserId == request.UserId
-                            && x.PaidOrReceivedAt >= startDate
-                            && x.PaidOrReceivedAt < DateTime.UtcNow.AddDays(1))
-                .GroupBy(x => 1)
-                .Select(x => new FinancialSummary(
-                    request.UserId,
-                    x.Where(ty => ty.Type == ETransactionType.Deposit).Sum(t => t.Amount),
-                    x.Where(ty => ty.Type == ETransactionType.Withdraw).Sum(t => t.Amount)))
-                .FirstOrDefaultAsync();
+	public async Task<Response<FinancialSummary?>> GetFinancialSummaryReportAsync(GetFinancialSummaryRequest request)
+	{
+		var currentDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
+		var oneYearAgoDate = currentDate.AddYears(-1);
 
-            return new Response<FinancialSummary?>(data);
-        }
-        catch
-        {
-            return new Response<FinancialSummary?>(null, 500, "Something went wrong");
-        }
-    }
+		try
+		{
+			var data = await context.Transactions
+				.AsNoTracking()
+				.Where(x => x.UserId == request.UserId
+							&& x.PaidOrReceivedAt >= oneYearAgoDate
+							&& x.PaidOrReceivedAt < DateTime.UtcNow.AddDays(1))
+				.GroupBy(x => 1)
+				.Select(x => new FinancialSummary(
+					request.UserId,
+					x.Where(ty => ty.Type == ETransactionType.Deposit).Sum(t => t.Amount),
+					x.Where(ty => ty.Type == ETransactionType.Withdraw).Sum(t => t.Amount)))
+				.FirstOrDefaultAsync();
+
+			return new Response<FinancialSummary?>(data);
+		}
+		catch
+		{
+			return new Response<FinancialSummary?>(null, 500, "Something went wrong");
+		}
+	}
 }
