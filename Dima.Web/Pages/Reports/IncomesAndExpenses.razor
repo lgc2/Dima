@@ -3,11 +3,20 @@
 
 <MudText Typo="Typo.h3">Receitas e Despesas</MudText>
 
-<MudPaper Class="doc-section-component-container my-4 py-4">
-	<MudChart ChartType="ChartType.Bar"
-			  ChartSeries="@Series"
-			  XAxisLabels="@XAxisLabels"
-			  Width="@Width"
-			  Height="@Height"
-			  ChartOptions="@ChartOptions" />
-</MudPaper>
+@if (ThereIsDataToShow)
+{
+	<MudPaper Class="doc-section-component-container my-4 py-4">
+		<MudChart ChartType="ChartType.Bar"
+				  ChartSeries="@Series"
+				  XAxisLabels="@XAxisLabels"
+				  Width="@Width"
+				  Height="@Height"
+				  ChartOptions="@ChartOptions" />
+	</MudPaper>
+}
+else
+{
+	<MudPaper Class="doc-section-component-container my-4 mx-4 py-4 px-4">
+		Não há lançamentos para os últimos 12 meses
+	</MudPaper>
+}

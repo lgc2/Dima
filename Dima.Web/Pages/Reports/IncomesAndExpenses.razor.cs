@@ -9,7 +9,9 @@ namespace Dima.Web.Pages.Reports;
 public partial class IncomesAndExpensesPage : ComponentBase
 {
 	#region Properties
-	
+
+	protected bool ThereIsDataToShow = false;
+
 	protected readonly string Width = "100%";
 	protected readonly string Height = "350px";
 
@@ -46,11 +48,16 @@ public partial class IncomesAndExpensesPage : ComponentBase
 		{
 			var result = await Handler.GetIncomesAndExpensesReportAsync(new GetIncomesAndExpansesRequest());
 
-			if (!result.IsSuccess || result.Data is null)
+			if (!result.IsSuccess)
 			{
 				Snackbar.Add("Falha ao obter o relatório", Severity.Error);
 				return;
 			}
+
+			if (result.Data is null || result.Data.Count == 0)
+				return;
+
+			ThereIsDataToShow = true;
 
 			XAxisLabels = result.Data
 				.Select(x => CultureInfo.GetCultureInfo("pt-BR").DateTimeFormat.GetMonthName(x.Month))

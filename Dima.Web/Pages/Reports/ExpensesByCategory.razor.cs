@@ -7,9 +7,11 @@ namespace Dima.Web.Pages.Reports;
 
 public partial class ExpensesByCategoryPage : ComponentBase
 {
-    #region Properties
-    
-    protected readonly string Width = "100%";
+	#region Properties
+
+	protected bool ThereIsDataToShow = false;
+
+	protected readonly string Width = "100%";
     protected readonly string Height = "350px";
 
     protected double[] Data = [];
@@ -33,13 +35,18 @@ public partial class ExpensesByCategoryPage : ComponentBase
         {
             var result = await Handler.GetExpensesByCategoryReportAsync(new GetExpensesByCategoryRequest());
 
-            if (!result.IsSuccess || result.Data is null)
+            if (!result.IsSuccess)
             {
                 Snackbar.Add("Falha ao obter o relatório", Severity.Error);
                 return;
-            }
+			}
 
-            Data = result.Data.Select(x => (double)x.Expenses * -1).ToArray();
+			if (result.Data is null || result.Data.Count == 0)
+				return;
+
+			ThereIsDataToShow = true;
+
+			Data = result.Data.Select(x => (double)x.Expenses * -1).ToArray();
             Labels = result.Data.Select(x => x.Category).ToArray();
         }
         catch (Exception ex)
