@@ -4,9 +4,9 @@ using Dima.Core.Requests.Reports;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Dima.Web.Pages.Reports;
+namespace Dima.Web.Components.Reports;
 
-public partial class IncomesAndExpensesPage : ComponentBase
+public partial class IncomesAndExpensesComponent : ComponentBase
 {
 	#region Properties
 

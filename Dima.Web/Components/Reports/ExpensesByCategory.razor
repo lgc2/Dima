@@ -1,0 +1,16 @@
+@inherits ExpensesByCategoryComponent
+
+@if (ThereIsDataToShow)
+{
+	<MudChart ChartType="ChartType.Donut"
+			  Width="@Width"
+			  Height="@Height"
+			  InputData="@Data"
+			  InputLabels="@Labels" />
+}
+else
+{
+	<MudText>
+		Não há lançamentos para os últimos 12 meses
+	</MudText>
+}

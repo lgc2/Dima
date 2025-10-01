@@ -1,0 +1,17 @@
+@inherits IncomesAndExpensesComponent
+
+@if (ThereIsDataToShow)
+{
+	<MudChart ChartType="ChartType.Line"
+			  ChartSeries="@Series"
+			  XAxisLabels="@XAxisLabels"
+			  Width="@Width"
+			  Height="@Height"
+			  ChartOptions="@ChartOptions" />
+}
+else
+{
+	<MudText>
+		Não há lançamentos para os últimos 12 meses
+	</MudText>
+}

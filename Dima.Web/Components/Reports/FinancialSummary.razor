@@ -1,0 +1,34 @@
+@inherits FinancialSummaryComponent
+
+@if (ThereIsDataToShow)
+{
+	<MudChip T="string" Color="Color.Success" Size="Size.Small" Variant="Variant.Filled" Class="ml-4 mb-4">
+		Lançamentos dos últimos 12 meses
+	</MudChip>
+	<MudChart ChartType="ChartType.Donut"
+			  Width="@Width"
+			  Height="@Height"
+			  InputData="@Data"
+			  InputLabels="@Labels">
+		<CustomGraphics>
+			<text class="donut-inner-text" x="50%" y="35%"
+				  dominant-baseline="middle"
+				  text-anchor="middle"
+				  font-family="Helvetica"
+				  font-size="20">
+				Total
+			</text>
+			<text class="donut-inner-text" x="50%" y="50%"
+				  dominant-baseline="middle"
+				  text-anchor="middle"
+				  font-family="Helvetica"
+				  font-size="30">@Total</text>
+		</CustomGraphics>
+	</MudChart>
+}
+else
+{
+	<MudText>
+		Não há lançamentos para os últimos 12 meses
+	</MudText>
+}
