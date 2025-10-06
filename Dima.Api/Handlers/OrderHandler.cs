@@ -12,11 +12,9 @@ public class OrderHandler(AppDbContext context) : IOrderHandler
 {
 	public async Task<Response<Order?>> CancelAsync(CancelOrderRequest request)
 	{
-		Order? order;
-
 		try
 		{
-			order = await context.Orders
+			var order = await context.Orders
 				.Include(x => x.Product)
 				.Include(x => x.Voucher)
 				.AsNoTracking()
@@ -41,9 +39,81 @@ public class OrderHandler(AppDbContext context) : IOrderHandler
 		}
 	}
 
-	public Task<Response<Order?>> CreateAsync(CreateOrderRequest request)
+	public async Task<Response<Order?>> CreateAsync(CreateOrderRequest request)
 	{
-		throw new NotImplementedException();
+		Product? product;
+
+		try
+		{
+			product = await context.Products
+				.AsNoTracking()
+				.FirstOrDefaultAsync(p => p.Id == request.ProductId && p.IsActive == true);
+
+			if (product is null) return new Response<Order?>(null, 400, "The Order Product was not found");
+
+			context.Attach(product);
+		}
+		catch
+		{
+			return new Response<Order?>(null, 500, "It was not possible to get the product");
+		}
+
+		Voucher? voucher = null;
+
+		try
+		{
+			if (request.VoucherId is not null && request.VoucherId > 0)
+			{
+				voucher = await context.Vouchers
+				.AsNoTracking()
+				.FirstOrDefaultAsync(v => v.Id == request.VoucherId && v.IsActive == true);
+
+				if (voucher is null)
+					return new Response<Order?>(null, 400, "The Order Voucher was not found or it is invalid");
+
+				context.Attach(voucher);
+			}
+		}
+		catch
+		{
+			return new Response<Order?>(null, 500, "It was not possible to get the voucher");
+		}
+
+		var order = new Order
+		{
+			UserId = request.UserId,
+			Product = product,
+			ProductId = request.ProductId,
+			Voucher = voucher,
+			VoucherId = request.VoucherId,
+		};
+
+		try
+		{
+			await context.Orders.AddAsync(order);
+			await context.SaveChangesAsync();
+		}
+		catch
+		{
+			return new Response<Order?>(null, 500, "It was not possible to create the order");
+		}
+
+		try
+		{
+			if (voucher is not null)
+			{
+				voucher.IsActive = false;
+				context.Vouchers.Update(voucher);
+				await context.SaveChangesAsync();
+			}
+		}
+		catch
+		{
+			return new Response<Order?>(
+				null, 500, $"Order {order.Number} created successfully, but the Voucher could not be deactivated");
+		}
+
+		return new Response<Order?>(order, 201, $"Order {order.Number} created successfully");
 	}
 
 	public Task<PagedResponse<List<Order>?>> GetAllAsync(GetAllOrdersRequest request)
