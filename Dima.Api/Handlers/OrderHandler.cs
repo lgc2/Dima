@@ -126,9 +126,53 @@ public class OrderHandler(AppDbContext context) : IOrderHandler
 		throw new NotImplementedException();
 	}
 
-	public Task<Response<Order?>> PayAsync(PayOrderRequest request)
+	public async Task<Response<Order?>> PayAsync(PayOrderRequest request)
 	{
-		throw new NotImplementedException();
+		Order? order;
+
+		try
+		{
+			order = await context.Orders
+				//.Include(x => x.Product)
+				//.Include(x => x.Voucher)
+				.FirstOrDefaultAsync(o => o.Id == request.Id && o.UserId == request.UserId);
+
+			if (order == null) return new Response<Order?>(null, 404, "Order not found");
+		}
+		catch
+		{
+			return new Response<Order?>(null, 500, "Something went wrong while trying to retrieve the order");
+		}
+
+		switch (order.Status)
+		{
+			case EOrderStatus.Canceled:
+				return new Response<Order?>(order, 400, "This order has already been canceled and cannot be paid");
+			case EOrderStatus.Paid:
+				return new Response<Order?>(order, 400, "This order has already been paid");
+			case EOrderStatus.Refunded:
+				return new Response<Order?>(order, 400, "This order has already been refunded and cannot be paid");
+			case EOrderStatus.WaitingPayment:
+				break;
+			default:
+				return new Response<Order?>(order, 400, "Invalid order status");
+		}
+
+		order.Status = EOrderStatus.Paid;
+		order.ExternalReference = request.ExternalReference;
+		order.UpdatedAt = DateTime.UtcNow;
+
+		try
+		{
+			context.Orders.Update(order);
+			await context.SaveChangesAsync();
+		}
+		catch
+		{
+			return new Response<Order?>(order, 500, "Something went wrong while trying to update the order");
+		}
+
+		return new Response<Order?>(order, message: $"Order {order.Number} paid successfully");
 	}
 
 	public Task<Response<Order?>> RefundAsync(RefundOrderRequest request)
