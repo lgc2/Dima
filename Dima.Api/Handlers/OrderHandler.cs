@@ -175,8 +175,56 @@ public class OrderHandler(AppDbContext context) : IOrderHandler
 		return new Response<Order?>(order, message: $"Order {order.Number} paid successfully");
 	}
 
-	public Task<Response<Order?>> RefundAsync(RefundOrderRequest request)
+	public async Task<Response<Order?>> RefundAsync(RefundOrderRequest request)
 	{
-		throw new NotImplementedException();
+		Order? order;
+
+		try
+		{
+			order = await context.Orders
+				//.Include(x => x.Product)
+				//.Include(x => x.Voucher)
+				.FirstOrDefaultAsync(o => o.Id == request.Id && o.UserId == request.UserId);
+
+			if (order == null) return new Response<Order?>(null, 404, "Order not found");
+
+		}
+		catch
+		{
+			return new Response<Order?>(null, 500, "Something went wrong while trying to retrieve the order");
+
+		}
+
+		switch (order.Status)
+		{
+			case EOrderStatus.Canceled:
+				return new Response<Order?>(order, 400, "This order has already been canceled and cannot be refunded");
+			case EOrderStatus.Paid:
+				break;
+			case EOrderStatus.Refunded:
+				return new Response<Order?>(order, 400, "This order has already been refunded");
+			case EOrderStatus.WaitingPayment:
+				return new Response<Order?>(order, 400, "This order has not been paid yet, so it cannot be refunded");
+			default:
+				return new Response<Order?>(order, 400, "Invalid order status");
+		}
+
+		if (DateTime.UtcNow.Date > order.CreatedAt.AddDays(7).Date)
+			return new Response<Order?>(order, 400, "This order has up to seven days to be refunded");
+
+		order.Status = EOrderStatus.Refunded;
+		order.UpdatedAt = DateTime.UtcNow;
+
+		try
+		{
+			context.Orders.Update(order);
+			await context.SaveChangesAsync();
+		}
+		catch
+		{
+			return new Response<Order?>(order, 500, "Something went wrong while trying to update the order");
+		}
+
+		return new Response<Order?>(order, message: $"Order {order.Number} refunded successfully");
 	}
 }
