@@ -3,11 +3,11 @@ using Dima.Api.IntegrationTests.Fixtures;
 
 namespace Dima.Api.IntegrationTests;
 
-public class CategoriesIntegrationTests : IClassFixture<TestFixture>
+public class CategoriesIntegrationTests : IClassFixture<AuthenticatedTestFixture>
 {
 	private readonly CategoriesClient _categoriesClient;
 
-	public CategoriesIntegrationTests(TestFixture fixture)
+	public CategoriesIntegrationTests(AuthenticatedTestFixture fixture)
 	{
 		_categoriesClient = new CategoriesClient(fixture.HttpClient);
 	}
