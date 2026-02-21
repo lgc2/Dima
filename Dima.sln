@@ -3,25 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dima.Core", "Dima.Core\Dima.Core.csproj", "{D9A85746-5EBD-4971-A4C3-10E797CF8DFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dima.Core", "Dima.Core\Dima.Core.csproj", "{D9A85746-5EBD-4971-A4C3-10E797CF8DFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dima.Api", "Dima.Api\Dima.Api.csproj", "{6CB209E5-01DA-48CB-9402-72BCF8C66BE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dima.Api", "Dima.Api\Dima.Api.csproj", "{6CB209E5-01DA-48CB-9402-72BCF8C66BE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dima.Web", "Dima.Web\Dima.Web.csproj", "{A1A95C45-F66A-4EDC-8210-813B4C7D2D2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dima.Web", "Dima.Web\Dima.Web.csproj", "{A1A95C45-F66A-4EDC-8210-813B4C7D2D2A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D6862E49-A7BE-47FB-9586-CF8CD20667EF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{847419CB-42A4-4B35-957C-3618CA5C2215}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dima.Api.IntegrationTests", "tests\IntegrationTests\Dima.Api.IntegrationTests\Dima.Api.IntegrationTests.csproj", "{0D753AD6-5830-4378-9C8F-7BFF9A1E19A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dima.Api.IntegrationTests", "tests\IntegrationTests\Dima.Api.IntegrationTests\Dima.Api.IntegrationTests.csproj", "{0D753AD6-5830-4378-9C8F-7BFF9A1E19A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D9A85746-5EBD-4971-A4C3-10E797CF8DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -41,8 +38,14 @@ Global
 		{0D753AD6-5830-4378-9C8F-7BFF9A1E19A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D753AD6-5830-4378-9C8F-7BFF9A1E19A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{847419CB-42A4-4B35-957C-3618CA5C2215} = {D6862E49-A7BE-47FB-9586-CF8CD20667EF}
 		{0D753AD6-5830-4378-9C8F-7BFF9A1E19A9} = {847419CB-42A4-4B35-957C-3618CA5C2215}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0C0D5E1D-6EFA-436F-9815-406042523632}
 	EndGlobalSection
 EndGlobal

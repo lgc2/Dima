@@ -9,6 +9,9 @@ public class AccountClient : ApiClientBase
 	{
 	}
 
+	public async Task<HttpResponseMessage?> RegisterAsync(RegisterRequest request) =>
+		await _httpClient.PostAsJsonAsync("/v1/identity/register", request);
+
 	public async Task<HttpResponseMessage?> LoginAsync(LoginRequest request) =>
 		await _httpClient.PostAsJsonAsync($"/v1/identity/login?useCookies=true", request);
 }
