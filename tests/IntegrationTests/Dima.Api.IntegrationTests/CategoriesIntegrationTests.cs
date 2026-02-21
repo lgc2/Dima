@@ -1,4 +1,5 @@
 using Dima.Api.IntegrationTests.Clients;
+using Dima.Api.IntegrationTests.Fixtures;
 
 namespace Dima.Api.IntegrationTests;
 
