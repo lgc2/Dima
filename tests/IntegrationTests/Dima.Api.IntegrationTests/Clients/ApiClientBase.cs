@@ -1,32 +1,14 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Net.Http.Json;
 
 namespace Dima.Api.IntegrationTests.Clients;
 
 public class ApiClientBase
 {
-	private static IHttpClientFactory _httpClientFactory { get; set; }
 	protected readonly HttpClient _httpClient;
-	private readonly CookieContainer _cookieContainer;
 
-	static ApiClientBase()
+	public ApiClientBase(HttpClient httpClient)
 	{
-		Startup.ConfigureServices();
-		_httpClientFactory = Startup.ServiceProvider.GetRequiredService<IHttpClientFactory>();
-	}
-
-	public ApiClientBase()
-	{
-		_cookieContainer = new CookieContainer();
-		var handler = new HttpClientHandler
-		{
-			CookieContainer = _cookieContainer,
-			UseCookies = true
-		};
-
-		_httpClient = new HttpClient(handler);
-		_httpClient = _httpClientFactory.CreateClient();
+		_httpClient = httpClient;
 	}
 
 	public async Task<T?> GetAsync<T>(string url)

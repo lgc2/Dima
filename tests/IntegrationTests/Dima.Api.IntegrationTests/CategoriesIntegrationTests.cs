@@ -6,9 +6,9 @@ public class CategoriesIntegrationTests : IClassFixture<TestFixture>
 {
 	private readonly CategoriesClient _categoriesClient;
 
-	public CategoriesIntegrationTests()
+	public CategoriesIntegrationTests(TestFixture fixture)
 	{
-		_categoriesClient = new CategoriesClient();
+		_categoriesClient = new CategoriesClient(fixture.HttpClient);
 	}
 
 	[Fact]

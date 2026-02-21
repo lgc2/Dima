@@ -5,6 +5,10 @@ namespace Dima.Api.IntegrationTests.Clients;
 
 public class AccountClient : ApiClientBase
 {
+	public AccountClient(HttpClient httpClient) : base(httpClient)
+	{
+	}
+
 	public async Task<HttpResponseMessage?> LoginAsync(LoginRequest request) =>
-		await _httpClient.PostAsJsonAsync($"{Configuration.BackendUrl}/v1/identity/login?useCookies=true", request);
+		await _httpClient.PostAsJsonAsync($"/v1/identity/login?useCookies=true", request);
 }

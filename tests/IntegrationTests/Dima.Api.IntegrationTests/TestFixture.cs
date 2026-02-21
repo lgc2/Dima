@@ -1,19 +1,22 @@
 ﻿using Dima.Api.IntegrationTests.Clients;
+using Dima.Api.IntegrationTests.Factory;
 using Dima.Core.Requests.Account;
 
 namespace Dima.Api.IntegrationTests;
 
-public class TestFixture : IDisposable
+public class TestFixture : IAsyncLifetime
 {
+	private readonly TestWebApplicationFactory _factory = new();
 	private readonly AccountClient _accountClient;
+	public HttpClient HttpClient { get; private set; } = null!;
 
 	public TestFixture()
 	{
-		_accountClient = new AccountClient();
-		LoginAsync().Wait();
+		HttpClient = _factory.CreateClient();
+		_accountClient = new AccountClient(HttpClient);
 	}
 
-	private async Task LoginAsync()
+	public async Task InitializeAsync()
 	{
 		var loginRequest = new LoginRequest
 		{
@@ -25,7 +28,8 @@ public class TestFixture : IDisposable
 		Assert.Equal(200, (int)loginResponse!.StatusCode);
 	}
 
-	public void Dispose()
+	public async Task DisposeAsync()
 	{
+		await _factory.DisposeAsync();
 	}
 }

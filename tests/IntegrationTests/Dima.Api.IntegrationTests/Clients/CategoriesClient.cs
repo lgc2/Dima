@@ -5,6 +5,10 @@ namespace Dima.Api.IntegrationTests.Clients;
 
 public class CategoriesClient : ApiClientBase
 {
+	public CategoriesClient(HttpClient httpClient) : base(httpClient)
+	{
+	}
+
 	public async Task<Response<Category>?> GetByIdAsync(long id) =>
-		await GetAsync<Response<Category>?>($"{Configuration.BackendUrl}/v1/categories/{id}");
+		await GetAsync<Response<Category>?>($"/v1/categories/{id}");
 }
