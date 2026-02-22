@@ -16,7 +16,7 @@ public class CategoriesIntegrationTests : IClassFixture<AuthenticatedTestFixture
 	public async Task GetByIdEndpoint_ShouldReturnSuccess()
 	{
 		var getByIdResponse = await _categoriesClient.GetByIdAsync(10020);
-		Assert.Equal(200, getByIdResponse!._code);
+		Assert.Equal(200, getByIdResponse!.Code);
 		Assert.Equal(10020, getByIdResponse!.Data!.Id);
 		Assert.Equal("Tech Lerning (title changed 1)", getByIdResponse!.Data!.Title);
 		Assert.Equal("Learning expanses (description changed 3)", getByIdResponse!.Data!.Description);

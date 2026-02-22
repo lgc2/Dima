@@ -38,7 +38,7 @@ namespace Dima.Api.Endpoints.Transactions
 
 			var result = await handler.GetByPeriodAsync(request);
 
-			return Results.Json(result, statusCode: result._code);
+			return Results.Json(result, statusCode: result.Code);
 		}
 	}
 }

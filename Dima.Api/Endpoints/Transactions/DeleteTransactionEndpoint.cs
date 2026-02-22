@@ -27,7 +27,7 @@ namespace Dima.Api.Endpoints.Transactions
 
 			var result = await handler.DeleteAsync(request);
 
-			return Results.Json(result, statusCode: result._code);
+			return Results.Json(result, statusCode: result.Code);
 		}
 	}
 }

@@ -9,6 +9,5 @@ public class CategoriesClient : ApiClientBase
 	{
 	}
 
-	public async Task<Response<Category>?> GetByIdAsync(long id) =>
-		await GetAsync<Response<Category>?>($"/v1/categories/{id}");
+	public async Task<Response<Category>?> GetByIdAsync(long id) => await GetAsync<Response<Category>?>($"/v1/categories/{id}");
 }

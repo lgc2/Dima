@@ -22,6 +22,6 @@ public class CreateCategoryEndpoint : IEndpoint
 		request.UserId = user.Identity?.Name ?? string.Empty;
 		var result = await handler.CreateAsync(request);
 
-		return Results.Json(result, statusCode: result._code);
+		return Results.Json(result, statusCode: result.Code);
 	}
 }

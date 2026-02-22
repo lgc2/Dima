@@ -27,6 +27,6 @@ public class GetCategoryByIdEndpoint : IEndpoint
 
 		var result = await handler.GetByIdAsync(request);
 
-		return Results.Json(result, statusCode: result._code);
+		return Results.Json(result, statusCode: result.Code);
 	}
 }

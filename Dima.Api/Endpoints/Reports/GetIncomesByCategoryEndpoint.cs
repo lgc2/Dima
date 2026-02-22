@@ -23,6 +23,6 @@ public class GetIncomesByCategoryEndpoint : IEndpoint
 
         var result = await handler.GetIncomesByCategoryReportAsync(request);
 
-        return Results.Json(result, statusCode: result._code);
+        return Results.Json(result, statusCode: result.Code);
     }
 }

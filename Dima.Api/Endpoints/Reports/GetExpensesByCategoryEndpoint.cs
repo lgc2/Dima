@@ -23,6 +23,6 @@ public class GetExpensesByCategoryEndpoint : IEndpoint
 
         var result = await handler.GetExpensesByCategoryReportAsync(request);
 
-        return Results.Json(result, statusCode: result._code);
+        return Results.Json(result, statusCode: result.Code);
     }
 }

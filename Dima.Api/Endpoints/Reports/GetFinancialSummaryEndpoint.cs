@@ -23,6 +23,6 @@ public class GetFinancialSummaryEndpoint : IEndpoint
 
         var result = await handler.GetFinancialSummaryReportAsync(request);
 
-        return Results.Json(result, statusCode: result._code);
+        return Results.Json(result, statusCode: result.Code);
     }
 }

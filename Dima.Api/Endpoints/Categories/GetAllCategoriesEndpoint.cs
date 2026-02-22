@@ -34,6 +34,6 @@ public class GetAllCategoriesEndpoint : IEndpoint
 
 		var result = await handler.GetAllAsync(request);
 
-		return Results.Json(result, statusCode: result._code);
+		return Results.Json(result, statusCode: result.Code);
 	}
 }

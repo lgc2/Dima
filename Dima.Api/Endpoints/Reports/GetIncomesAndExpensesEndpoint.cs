@@ -23,6 +23,6 @@ public class GetIncomesAndExpensesEndpoint : IEndpoint
 
         var result = await handler.GetIncomesAndExpensesReportAsync(request);
 
-        return Results.Json(result, statusCode: result._code);
+        return Results.Json(result, statusCode: result.Code);
     }
 }
