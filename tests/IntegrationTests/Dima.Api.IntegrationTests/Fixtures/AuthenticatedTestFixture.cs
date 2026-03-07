@@ -4,15 +4,22 @@ namespace Dima.Api.IntegrationTests.Fixtures;
 
 public class AuthenticatedTestFixture : TestFixtureBase
 {
-	public override async Task InitializeAsync()
-	{
-		var loginRequest = new LoginRequest
-		{
-			Email = "test3@test.com",
-			Password = "Passw0rd@"
-		};
+    private readonly TestFixtureBase _fixture;
 
-		var loginResponse = await _accountClient.LoginAsync(loginRequest);
-		Assert.Equal(200, (int)loginResponse!.StatusCode);
-	}
+    public AuthenticatedTestFixture(TestFixtureBase fixture)
+    {
+        _fixture = fixture;
+    }
+
+    public override async Task InitializeAsync()
+    {
+        var loginRequest = new LoginRequest
+        {
+            Email = _fixture.RegisterRequest.Email,
+            Password = _fixture.RegisterRequest.Password
+        };
+
+        var loginResponse = await _accountClient.LoginAsync(loginRequest);
+        Assert.Equal(200, (int)loginResponse!.StatusCode);
+    }
 }

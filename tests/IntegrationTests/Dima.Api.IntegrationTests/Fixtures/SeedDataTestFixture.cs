@@ -7,32 +7,36 @@ namespace Dima.Api.IntegrationTests.Fixtures;
 
 public class SeedDataTestFixture : TestFixtureBase
 {
-	public readonly CreateCategoryRequest CreateCategoryReq = new()
-	{
-		UserId = "test3@test.com",
-		Title = $"Tech Lerning (title changed 1) {new Random().Next(0, 1000000)}",
-		Description = $"Learning expanses (description changed 3) {new Random().Next(0, 1000000)}"
-	};
+    public readonly CreateCategoryRequest CreateCategoryReq = new()
+    {
+        UserId = "test3@test.com",
+        Title = $"Tech Lerning (title changed 1) {new Random().Next(0, 1000000)}",
+        Description = $"Learning expanses (description changed 3) {new Random().Next(0, 1000000)}"
+    };
 
-	public Response<Category>? Category { get; private set; }
+    public Response<Category>? Category { get; private set; }
 
-	public override async Task InitializeAsync()
-	{
-		await Login();
-		Category = await CreateCategory();
-	}
+    public override async Task InitializeAsync()
+    {
+        await Login();
+        Category = await _categoriesClient.CreateAsync(CreateCategoryReq);
+    }
 
-	private async Task Login()
-	{
-		var loginRequest = new LoginRequest
-		{
-			Email = "test3@test.com",
-			Password = "Passw0rd@"
-		};
+    public override async Task DisposeAsync()
+    {
+        await _categoriesClient.DeleteAsync(Category!.Data!.Id);
+        await _factory.DisposeAsync();
+    }
 
-		var loginResponse = await _accountClient.LoginAsync(loginRequest);
-		Assert.Equal(200, (int)loginResponse!.StatusCode);
-	}
+    private async Task Login()
+    {
+        var loginRequest = new LoginRequest
+        {
+            Email = "test3@test.com",
+            Password = "Passw0rd@"
+        };
 
-	private async Task<Response<Category>?> CreateCategory() => await _categoriesClient.CreateAsync(CreateCategoryReq);
+        var loginResponse = await _accountClient.LoginAsync(loginRequest);
+        Assert.Equal(200, (int)loginResponse!.StatusCode);
+    }
 }
