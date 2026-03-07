@@ -3,24 +3,25 @@ using Dima.Api.IntegrationTests.Fixtures;
 
 namespace Dima.Api.IntegrationTests;
 
-public class CategoriesIntegrationTests : IClassFixture<AuthenticatedTestFixture>
+public class CategoriesIntegrationTests : IClassFixture<SeedDataTestFixture>
 {
+	private readonly SeedDataTestFixture _fixture;
 	private readonly CategoriesClient _categoriesClient;
 
-	public CategoriesIntegrationTests(AuthenticatedTestFixture fixture)
+	public CategoriesIntegrationTests(SeedDataTestFixture fixture)
 	{
+		_fixture = fixture;
 		_categoriesClient = new CategoriesClient(fixture.HttpClient);
 	}
 
 	[Fact]
 	public async Task GetByIdEndpoint_ShouldReturnSuccess()
 	{
-		var getByIdResponse = await _categoriesClient.GetByIdAsync(10020);
+		var getByIdResponse = await _categoriesClient.GetByIdAsync(_fixture.Category!.Data!.Id);
 		Assert.Equal(200, getByIdResponse!.Code);
-		Assert.Equal(10020, getByIdResponse!.Data!.Id);
-		Assert.Equal("Tech Lerning (title changed 1)", getByIdResponse!.Data!.Title);
-		Assert.Equal("Learning expanses (description changed 3)", getByIdResponse!.Data!.Description);
-		Assert.Equal("test3@test.com", getByIdResponse!.Data!.UserId);
+		Assert.Equal(_fixture.CreateCategoryReq.Title, getByIdResponse!.Data!.Title);
+		Assert.Equal(_fixture.CreateCategoryReq.Description, getByIdResponse!.Data!.Description);
+		Assert.Equal(_fixture.CreateCategoryReq.UserId, getByIdResponse!.Data!.UserId);
 		Assert.Null(getByIdResponse.Message);
 	}
 }
