@@ -19,7 +19,7 @@ public class AuthenticatedTestFixture : TestFixtureBase
             Password = _fixture.RegisterRequest.Password
         };
 
-        var loginResponse = await _accountClient.LoginAsync(loginRequest);
+        var loginResponse = await AccountClient.LoginAsync(loginRequest);
         Assert.Equal(200, (int)loginResponse!.StatusCode);
     }
 }

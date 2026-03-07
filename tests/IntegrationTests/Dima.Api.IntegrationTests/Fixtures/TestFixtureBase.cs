@@ -7,9 +7,10 @@ namespace Dima.Api.IntegrationTests.Fixtures;
 public class TestFixtureBase : IAsyncLifetime
 {
     protected readonly TestWebApplicationFactory _factory = new();
-    protected readonly AccountClient _accountClient;
-    protected readonly CategoriesClient _categoriesClient;
-    public HttpClient HttpClient { get; private set; } = null!;
+    public readonly AccountClient AccountClient;
+    public readonly CategoriesClient CategoriesClient;
+    public readonly TransactionsClient TransactionsClient;
+    private HttpClient _httpClient { get; } = null!;
 
     public readonly RegisterRequest RegisterRequest = new()
     {
@@ -19,14 +20,15 @@ public class TestFixtureBase : IAsyncLifetime
 
     public TestFixtureBase()
     {
-        HttpClient = _factory.CreateClient();
-        _accountClient = new AccountClient(HttpClient);
-        _categoriesClient = new CategoriesClient(HttpClient);
+        _httpClient = _factory.CreateClient();
+        AccountClient = new AccountClient(_httpClient);
+        CategoriesClient = new CategoriesClient(_httpClient);
+        TransactionsClient = new TransactionsClient(_httpClient);
     }
 
     public virtual async Task InitializeAsync()
     {
-        await _accountClient.RegisterAsync(RegisterRequest);
+        await AccountClient.RegisterAsync(RegisterRequest);
     }
 
     public virtual async Task DisposeAsync()

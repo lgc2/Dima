@@ -1,5 +1,4 @@
-﻿using Dima.Api.IntegrationTests.Clients;
-using Dima.Api.IntegrationTests.Fixtures;
+﻿using Dima.Api.IntegrationTests.Fixtures;
 using Dima.Core.Requests.Account;
 
 namespace Dima.Api.IntegrationTests;
@@ -7,12 +6,10 @@ namespace Dima.Api.IntegrationTests;
 public class LoginIntegrationTests : IClassFixture<TestFixtureBase>
 {
     private readonly TestFixtureBase _fixture;
-    private readonly AccountClient _accountClient;
 
     public LoginIntegrationTests(TestFixtureBase fixture)
     {
         _fixture = fixture;
-        _accountClient = new AccountClient(fixture.HttpClient);
     }
 
     [Fact]
@@ -24,7 +21,7 @@ public class LoginIntegrationTests : IClassFixture<TestFixtureBase>
             Password = _fixture.RegisterRequest.Password
         };
 
-        var loginResponse = await _accountClient.LoginAsync(loginRequest);
+        var loginResponse = await _fixture.AccountClient.LoginAsync(loginRequest);
         Assert.Equal(200, (int)loginResponse!.StatusCode);
     }
 
@@ -37,7 +34,7 @@ public class LoginIntegrationTests : IClassFixture<TestFixtureBase>
             Password = "passw0rd@3"
         };
 
-        var loginResponse = await _accountClient.LoginAsync(loginRequest);
+        var loginResponse = await _fixture.AccountClient.LoginAsync(loginRequest);
         Assert.Equal(401, (int)loginResponse!.StatusCode);
     }
 }
