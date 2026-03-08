@@ -18,25 +18,7 @@ public class SeedDataTestFixture : TestFixtureBase
     {
         await AccountClient.RegisterAsync(RegisterRequest);
         await Login();
-
-        CreateCategoryReq = new CreateCategoryRequest
-        {
-            UserId = RegisterRequest.Email,
-            Title = $"Tech Learning {new Random().Next(0, 1000000)}",
-            Description = $"Learning expanses {new Random().Next(0, 1000000)}"
-        };
-        Category = await CategoriesClient.CreateAsync(CreateCategoryReq);
-
-        CreateTransactionReq = new CreateTransactionRequest
-        {
-            UserId = RegisterRequest.Email,
-            Title = $"Transaction Title {new Random().Next(0, 1000000)}",
-            Type = ETransactionType.Deposit,
-            Amount = 157.63m,
-            CategoryId = Category!.Data!.Id,
-            PaidOrReceivedAt =  DateTime.UtcNow,
-        };
-        Transaction = await TransactionsClient.CreateAsync(CreateTransactionReq);
+        await SeedData();
     }
 
     public override async Task DisposeAsync()
@@ -56,5 +38,27 @@ public class SeedDataTestFixture : TestFixtureBase
 
         var loginResponse = await AccountClient.LoginAsync(loginRequest);
         Assert.Equal(200, (int)loginResponse!.StatusCode);
+    }
+
+    private async Task SeedData()
+    {
+        CreateCategoryReq = new CreateCategoryRequest
+        {
+            UserId = RegisterRequest.Email,
+            Title = $"Tech Learning {new Random().Next(0, 1000000)}",
+            Description = $"Learning expanses {new Random().Next(0, 1000000)}"
+        };
+        Category = await CategoriesClient.CreateAsync(CreateCategoryReq);
+
+        CreateTransactionReq = new CreateTransactionRequest
+        {
+            UserId = RegisterRequest.Email,
+            Title = $"Transaction Title {new Random().Next(0, 1000000)}",
+            Type = ETransactionType.Deposit,
+            Amount = 157.63m,
+            CategoryId = Category!.Data!.Id,
+            PaidOrReceivedAt =  DateTime.UtcNow,
+        };
+        Transaction = await TransactionsClient.CreateAsync(CreateTransactionReq);
     }
 }
