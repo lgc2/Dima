@@ -11,7 +11,8 @@ public class SeedDataTestFixture : TestFixtureBase
 {
     public CreateCategoryRequest CreateCategoryReq { get; private set; } = null!;
     public CreateTransactionRequest CreateTransactionReq { get; private set; } = null!;
-    public Response<Category>? Category { get; private set; }
+    public List<Response<Category>?> Categories { get; set; } = [];
+    public long SeededCategoryId { get; private set; } = 0;
     public Response<Transaction>? Transaction { get; private set; }
 
     public override async Task InitializeAsync()
@@ -23,7 +24,11 @@ public class SeedDataTestFixture : TestFixtureBase
 
     public override async Task DisposeAsync()
     {
-        await CategoriesClient.DeleteAsync(Category!.Data!.Id);
+        foreach (var category in Categories)
+        {
+            await CategoriesClient.DeleteAsync(category!.Data!.Id);    
+        }
+
         await TransactionsClient.DeleteAsync(Transaction!.Data!.Id);
         await _factory.DisposeAsync();
     }
@@ -48,7 +53,9 @@ public class SeedDataTestFixture : TestFixtureBase
             Title = $"Tech Learning {new Random().Next(0, 1000000)}",
             Description = $"Learning expanses {new Random().Next(0, 1000000)}"
         };
-        Category = await CategoriesClient.CreateAsync(CreateCategoryReq);
+        var seededCategory = await CategoriesClient.CreateAsync(CreateCategoryReq);
+        SeededCategoryId = seededCategory!.Data!.Id;
+        Categories.Add(seededCategory);
 
         CreateTransactionReq = new CreateTransactionRequest
         {
@@ -56,7 +63,7 @@ public class SeedDataTestFixture : TestFixtureBase
             Title = $"Transaction Title {new Random().Next(0, 1000000)}",
             Type = ETransactionType.Deposit,
             Amount = 157.63m,
-            CategoryId = Category!.Data!.Id,
+            CategoryId = SeededCategoryId,
             PaidOrReceivedAt =  DateTime.UtcNow,
         };
         Transaction = await TransactionsClient.CreateAsync(CreateTransactionReq);
