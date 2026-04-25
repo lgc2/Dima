@@ -10,6 +10,17 @@ jobs:
     name: Run integration tests
     runs-on: ubuntu-latest
 
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        options: --name sqlserver --hostname sqlserver -p 1433:1433
+
+    env:
+      ConnectionStrings__DefaultConnection: Server=localhost,1433;Database=Dima;User Id=sa;Password=${{ secrets.DB_PASSWORD }};TrustServerCertificate=True
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,11 +30,17 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Install EF Core tools
+        run: dotnet tool install --global dotnet-ef
+
       - name: Restore dependencies
         run: dotnet restore Dima.sln
 
       - name: Build solution
         run: dotnet build Dima.sln --configuration Release --no-restore
+
+      - name: Run database migrations
+        run: dotnet ef database update --project Dima.Api --startup-project Dima.Api --configuration Release --no-build
 
       - name: Run integration tests
         run: dotnet test tests/IntegrationTests/Dima.Api.IntegrationTests/Dima.Api.IntegrationTests.csproj --configuration Release --no-restore --no-build
