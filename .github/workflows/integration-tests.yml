@@ -50,20 +50,21 @@ jobs:
       - name: Run database migrations
         run: dotnet ef database update --project Dima.Api --startup-project Dima.Api --configuration Release --no-build
 
-      - name: Run integration tests and save TRX results
+      - name: Run integration tests, save TRX and collect coverage
         run: |
           mkdir -p TestResults
           dotnet test tests/IntegrationTests/Dima.Api.IntegrationTests/Dima.Api.IntegrationTests.csproj \
             --configuration Release \
             --no-restore \
             --no-build \
+            --collect:"XPlat Code Coverage" \
             --logger "trx;LogFileName=integration-tests.trx" \
             --results-directory TestResults
 
       - name: Generate HTML report
         run: |
           reportgenerator \
-            -reports:TestResults/*.trx \
+            -reports:TestResults/**/coverage*.xml \
             -targetdir:TestResultsReport \
             -reporttypes:"Html;HtmlSummary"
 
