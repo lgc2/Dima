@@ -30,8 +30,11 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Install EF Core tools
-        run: dotnet tool install --global dotnet-ef
+      - name: Install EF Core and report tools
+        run: |
+          dotnet tool install --global dotnet-ef || dotnet tool update --global dotnet-ef
+          dotnet tool install --global dotnet-reportgenerator-globaltool || dotnet tool update --global dotnet-reportgenerator-globaltool
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore dependencies
         run: dotnet restore Dima.sln
@@ -42,5 +45,30 @@ jobs:
       - name: Run database migrations
         run: dotnet ef database update --project Dima.Api --startup-project Dima.Api --configuration Release --no-build
 
-      - name: Run integration tests
-        run: dotnet test tests/IntegrationTests/Dima.Api.IntegrationTests/Dima.Api.IntegrationTests.csproj --configuration Release --no-restore --no-build
+      - name: Run integration tests and save TRX results
+        run: |
+          mkdir -p TestResults
+          dotnet test tests/IntegrationTests/Dima.Api.IntegrationTests/Dima.Api.IntegrationTests.csproj \
+            --configuration Release \
+            --no-restore \
+            --no-build \
+            --logger "trx;LogFileName=integration-tests.trx" \
+            --results-directory TestResults
+
+      - name: Generate HTML report
+        run: |
+          reportgenerator \
+            -reports:TestResults/*.trx \
+            -targetdir:TestResultsReport \
+            -reporttypes:Html;HtmlSummary
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: TestResultsReport
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
