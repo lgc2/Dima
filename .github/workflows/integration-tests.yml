@@ -60,7 +60,7 @@ jobs:
           reportgenerator \
             -reports:TestResults/*.trx \
             -targetdir:TestResultsReport \
-            -reporttypes:Html;HtmlSummary
+            -reporttypes:"Html;HtmlSummary"
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
