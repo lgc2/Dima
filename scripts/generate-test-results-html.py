@@ -20,7 +20,20 @@ def render_html(summary: dict[str, str | int], results: list[dict[str, str]], ou
     output_path.parent.mkdir(parents=True, exist_ok=True)
     title = "Integration Test Results"
     with output_path.open("w", encoding="utf-8") as f:
-        f.write("""<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Integration Test Results</title>\n<style>body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;color:#222;margin:0;padding:0}header{padding:20px 24px;background:#1e3a8a;color:white}main{padding:24px}h1{margin:0 0 8px}table{border-collapse:collapse;width:100%;margin-top:16px;background:white}th,td{padding:12px 10px;border:1px solid #ddd;text-align:left}th{background:#f3f4f6}tr:nth-child(even){background:#f9fafb}.status-pass{color:#047857;font-weight:700}.status-fail{color:#b91c1c;font-weight:700}.status-other{color:#92400e;font-weight:700}.summary-card{display:inline-block;background:white;padding:16px 18px;margin:8px 8px 8px 0;border:1px solid #e5e7eb;border-radius:8px;min-width:180px}</style>\n</head>\n<body>\n<header>\n<h1>Integration Test Results</h1>\n</header>\n<main>\n")
+        f.write("""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integration Test Results</title>
+<style>body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f7;color:#222;margin:0;padding:0}header{padding:20px 24px;background:#1e3a8a;color:white}main{padding:24px}h1{margin:0 0 8px}table{border-collapse:collapse;width:100%;margin-top:16px;background:white}th,td{padding:12px 10px;border:1px solid #ddd;text-align:left}th{background:#f3f4f6}tr:nth-child(even){background:#f9fafb}.status-pass{color:#047857;font-weight:700}.status-fail{color:#b91c1c;font-weight:700}.status-other{color:#92400e;font-weight:700}.summary-card{display:inline-block;background:white;padding:16px 18px;margin:8px 8px 8px 0;border:1px solid #e5e7eb;border-radius:8px;min-width:180px}</style>
+</head>
+<body>
+<header>
+<h1>Integration Test Results</h1>
+</header>
+<main>
+""")
         f.write("<div>")
         for label, value in summary.items():
             f.write(f"<div class=\"summary-card\"><strong>{html.escape(label)}</strong><div>{html.escape(str(value))}</div></div>")
