@@ -63,7 +63,7 @@ jobs:
         run: |
           python3 scripts/generate-test-results-html.py \
             TestResults/integration-tests.trx \
-            TestResultsReport/test-results.html
+            TestResultsReport/index.html
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
